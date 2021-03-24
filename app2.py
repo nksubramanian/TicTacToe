@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, request, redirect, url_for
 
 
 app2 = Flask(__name__)
@@ -40,8 +40,6 @@ def index():
     return redirect(url_for("computation"))
 
 
-
-
 @app2.route("/xxx")
 def computation():
 
@@ -64,9 +62,10 @@ def computation():
         middle = middle+"<p>"
         for j in range(0, 3):
             if positions[i][j] == 0:
-                middle = middle+'''<input type="submit" value="%s" name="sub"/>''' % (str(i)+str(j))
+
+                middle = middle+'''<button name="sub" type="submit" value="%s">..</button>''' % (str(i)+str(j))
             else:
-                middle = middle+'''<input type="submit" value="%s"  disabled/> ''' % (str(positions[i][j]))
+                middle = middle+'''<button type="submit"  disabled> %s</button>''' % (str(positions[i][j]))
         middle = middle + "</p>"
 
     return top+middle+bottom
