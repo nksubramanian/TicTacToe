@@ -40,9 +40,6 @@ def index():
     return redirect(url_for("computation"))
 
 
-@app2.route("/x")
-def front_page():
-    return render_template("index.html")
 
 
 @app2.route("/xxx")
