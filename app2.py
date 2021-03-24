@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 app2 = Flask(__name__)
 positions = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
-x = [1, 2]
+x = ['x', 'o']
 
 
 @app2.route("/", methods=['GET', 'POST'])
