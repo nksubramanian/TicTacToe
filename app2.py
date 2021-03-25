@@ -40,7 +40,7 @@ def index():
 
 @app2.route("/fff")
 def fff():
-    return render_template('display.html', positions=positions)
+    return render_template('display.html', positions=positions, player=x[0])
 
 
 def is_game_over():
@@ -65,7 +65,7 @@ def is_game_over():
 
 
 def who_won():
-    if positions[0][0] == positions[1][1] == positions[2][2]!= 0:
+    if positions[0][0] == positions[1][1] == positions[2][2] != 0:
         return positions[0][0]
     elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
         return positions[0][0]
@@ -81,7 +81,6 @@ def who_won():
         return positions[0][1]
     elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
         return positions[0][1]
-
 
 
 app2.run()
