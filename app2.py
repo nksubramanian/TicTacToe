@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, render_template
 
 
 app2 = Flask(__name__)
@@ -30,45 +30,58 @@ def index():
             positions[2][1] = y
         if request.form.get('sub') == '22':
             positions[2][2] = y
+        if is_game_over():
+            return render_template('victory.html', positions=positions, player=who_won())
 
     x.reverse()
 
-    string1 = " "
-    for i in range(0, 3):
-        for j in range(0, 3):
-            string1 = string1 + str(positions[i][j])
-    return redirect(url_for("computation"))
+    return redirect(url_for("fff"))
 
 
-@app2.route("/xxx")
-def computation():
+@app2.route("/fff")
+def fff():
+    return render_template('display.html', positions=positions)
 
-    top = '''
-        <!DOCTYPE html>
-            <html>
-                <body>
 
-                    <form method="post" action="http://localhost:5000/">
-                            
-        '''
-    bottom = '''  
-                    </form>
-                </body>
-            </html>
-        '''
+def is_game_over():
+    if positions[0][0] == positions[1][1] == positions[2][2] != 0:
+        return True
+    elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
+        return True
+    elif positions[1][0] == positions[1][1] == positions[1][2] != 0:
+        return True
+    elif positions[2][0] == positions[2][1] == positions[2][2] != 0:
+        return True
+    elif positions[0][0] == positions[1][0] == positions[2][0] != 0:
+        return True
+    elif positions[0][1] == positions[1][1] == positions[2][1] != 0:
+        return True
+    elif positions[0][2] == positions[1][2] == positions[2][2] != 0:
+        return True
+    elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
+        return True
+    else:
+        return False
 
-    middle = " "
-    for i in range(0, 3):
-        middle = middle+"<p>"
-        for j in range(0, 3):
-            if positions[i][j] == 0:
 
-                middle = middle+'''<button name="sub" type="submit" value="%s">..</button>''' % (str(i)+str(j))
-            else:
-                middle = middle+'''<button type="submit"  disabled> %s</button>''' % (str(positions[i][j]))
-        middle = middle + "</p>"
+def who_won():
+    if positions[0][0] == positions[1][1] == positions[2][2]!= 0:
+        return positions[0][0]
+    elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
+        return positions[0][0]
+    elif positions[1][0] == positions[1][1] == positions[1][2] != 0:
+        return positions[1][0]
+    elif positions[2][0] == positions[2][1] == positions[2][2] != 0:
+        return positions[2][0]
+    elif positions[0][0] == positions[1][0] == positions[2][0] != 0:
+        return positions[0][0]
+    elif positions[0][1] == positions[1][1] == positions[2][1] != 0:
+        return positions[0][1]
+    elif positions[0][2] == positions[1][2] == positions[2][2] != 0:
+        return positions[0][1]
+    elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
+        return positions[0][1]
 
-    return top+middle+bottom
 
 
 app2.run()
