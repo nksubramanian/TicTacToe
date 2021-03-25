@@ -12,25 +12,12 @@ def index():
     print(request.method)
     y = x[0]
     if request.method == 'POST':
-        if request.form.get('sub') == '00':
-            positions[0][0] = y
-        if request.form.get('sub') == '01':
-            positions[0][1] = y
-        if request.form.get('sub') == '02':
-            positions[0][2] = y
-        if request.form.get('sub') == '10':
-            positions[1][0] = y
-        if request.form.get('sub') == '11':
-            positions[1][1] = y
-        if request.form.get('sub') == '12':
-            positions[1][2] = y
-        if request.form.get('sub') == '20':
-            positions[2][0] = y
-        if request.form.get('sub') == '21':
-            positions[2][1] = y
-        if request.form.get('sub') == '22':
-            positions[2][2] = y
+        sub_value = request.form.get('sub')
+        sub_value_int = int(sub_value)
+        y1 = sub_value_int % 3
+        x1 = sub_value_int // 3
 
+        positions[x1][y1] = y
         x.reverse()
 
         winner = who_won()
