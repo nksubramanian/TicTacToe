@@ -33,7 +33,7 @@ def index():
         if is_game_won():
             return render_template('victory.html', positions=positions, player=who_won())
         if is_game_draw():
-            return render_template('draw.html',positions=positions)
+            return render_template('draw.html', positions=positions)
 
     x.reverse()
 
@@ -47,7 +47,7 @@ def fff():
 
 def is_game_draw():
     for i in range(0, 3):
-        for j in range(0,3):
+        for j in range(0, 3):
             if positions[i][j] == 0:
                 return False
     return True
