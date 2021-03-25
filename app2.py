@@ -30,12 +30,14 @@ def index():
             positions[2][1] = y
         if request.form.get('sub') == '22':
             positions[2][2] = y
-        if is_game_won():
-            return render_template('victory.html', positions=positions, player=who_won())
+
+        x.reverse()
+
+        winner = who_won()
+        if winner is not None:
+            return render_template('victory.html', positions=positions, player=winner)
         if is_game_draw():
             return render_template('draw.html', positions=positions)
-
-    x.reverse()
 
     return redirect(url_for("fff"))
 
@@ -53,44 +55,32 @@ def is_game_draw():
     return True
 
 
-def is_game_won():
-    if positions[0][0] == positions[1][1] == positions[2][2] != 0:
-        return True
-    elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
-        return True
-    elif positions[1][0] == positions[1][1] == positions[1][2] != 0:
-        return True
-    elif positions[2][0] == positions[2][1] == positions[2][2] != 0:
-        return True
-    elif positions[0][0] == positions[1][0] == positions[2][0] != 0:
-        return True
-    elif positions[0][1] == positions[1][1] == positions[2][1] != 0:
-        return True
-    elif positions[0][2] == positions[1][2] == positions[2][2] != 0:
-        return True
-    elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
-        return True
-    else:
-        return False
+def who_won_with_pattern(pattern):
+    x1, y1 = pattern[0]
+    val = positions[x1][y1]
+    if val == 0:
+        return None
+    for (x2, y2) in pattern:
+        if val != positions[x2][y2]:
+            return None
+    return val
 
 
 def who_won():
-    if positions[0][0] == positions[1][1] == positions[2][2] != 0:
-        return positions[0][0]
-    elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
-        return positions[0][0]
-    elif positions[1][0] == positions[1][1] == positions[1][2] != 0:
-        return positions[1][0]
-    elif positions[2][0] == positions[2][1] == positions[2][2] != 0:
-        return positions[2][0]
-    elif positions[0][0] == positions[1][0] == positions[2][0] != 0:
-        return positions[0][0]
-    elif positions[0][1] == positions[1][1] == positions[2][1] != 0:
-        return positions[0][1]
-    elif positions[0][2] == positions[1][2] == positions[2][2] != 0:
-        return positions[0][1]
-    elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
-        return positions[0][2]
+    winning_patterns = [[(0, 0), (1, 1), (2, 2)],
+                        [(0, 0), (0, 1), (0, 2)],
+                        [(1, 0), (1, 1), (1, 2)],
+                        [(2, 0), (2, 1), (2, 2)],
+                        [(0, 0), (1, 0), (2, 0)],
+                        [(0, 1), (1, 1), (2, 1)],
+                        [(0, 2), (1, 2), (2, 2)],
+                        [(0, 2), (1, 1), (2, 0)]]
+
+    for pattern in winning_patterns:
+        winner = who_won_with_pattern(pattern)
+        if winner is not None:
+            return winner
+    return None
 
 
 app2.run()
