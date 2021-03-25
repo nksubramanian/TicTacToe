@@ -46,9 +46,9 @@ def fff():
 
 
 def is_game_draw():
-    for i in range(0, 3):
-        for j in range(0, 3):
-            if positions[i][j] == 0:
+    for i in positions:
+        for j in i:
+            if j == 0:
                 return False
     return True
 
