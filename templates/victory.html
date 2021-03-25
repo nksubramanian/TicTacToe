@@ -7,7 +7,11 @@
             {% for j in range(0, 3) %}
                 {% set testing =  positions[i][j]  %}
                 {% set iter=i|string+j|string  %}
+                {% if testing == 0 %}
+                    <button name="sub" type="submit" value="{{ iter }}" disabled>..</button>
+                {% else %}
                     <button type="submit"  disabled>{{testing}}</button>
+                {% endif %}
             {% endfor %}
             </p>
         {% endfor %}
