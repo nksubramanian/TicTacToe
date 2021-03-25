@@ -30,8 +30,10 @@ def index():
             positions[2][1] = y
         if request.form.get('sub') == '22':
             positions[2][2] = y
-        if is_game_over():
+        if is_game_won():
             return render_template('victory.html', positions=positions, player=who_won())
+        if is_game_draw():
+            return render_template('draw.html',positions=positions)
 
     x.reverse()
 
@@ -43,7 +45,15 @@ def fff():
     return render_template('display.html', positions=positions, player=x[0])
 
 
-def is_game_over():
+def is_game_draw():
+    for i in range(0, 3):
+        for j in range(0,3):
+            if positions[i][j] == 0:
+                return False
+    return True
+
+
+def is_game_won():
     if positions[0][0] == positions[1][1] == positions[2][2] != 0:
         return True
     elif positions[0][0] == positions[0][1] == positions[0][2] != 0:
@@ -80,7 +90,7 @@ def who_won():
     elif positions[0][2] == positions[1][2] == positions[2][2] != 0:
         return positions[0][1]
     elif positions[0][2] == positions[1][1] == positions[2][0] != 0:
-        return positions[0][1]
+        return positions[0][2]
 
 
 app2.run()
