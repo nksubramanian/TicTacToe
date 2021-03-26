@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, render_template
 from tic_tac_toe import TicTacToe
 
 tic_tac_toe = TicTacToe()
@@ -21,7 +21,7 @@ def index():
         sub_value = request.form.get('sub')
         if sub_value == "Reset":
             tic_tac_toe.reset()
-            return redirect(url_for("fff"))
+            return display()
         if sub_value == "Switch":
             if tic_tac_toe.is_relinquishing_starting_turn_possible():
                 tic_tac_toe.relinquish_starting_turn()
@@ -51,9 +51,6 @@ def index():
     return display()
 
 
-@app2.route("/fff")
-def fff():
-    return display()
 
 
 
