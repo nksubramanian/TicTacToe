@@ -16,6 +16,14 @@
             {% endfor %}
             </p>
         {% endfor %}
+            <p></p>
+            <p></p>
+            <button name="sub" type="submit" value="Reset" >Reset</button>
+            {% if enable == 1 %}
+                <button name="sub" type="submit" value="Switch" >Switch</button>
+            {% else %}
+                <button name="sub" type="submit" value="Switch" disabled>Switch</button>
+            {% endif %}
         </form>
         </body>
     </html>
