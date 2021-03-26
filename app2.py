@@ -4,6 +4,8 @@ from flask import Flask, request, redirect, url_for, render_template
 app2 = Flask(__name__)
 positions = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 players = ['x', 'o']
+no_of_rows = 3
+no_of_columns = 3
 
 
 @app2.route("/", methods=['GET', 'POST'])
@@ -26,16 +28,16 @@ def index():
         players.reverse()
         winner = who_won()
         if winner is not None:
-            return render_template('victory.html', positions=positions, player=winner)
+            return render_template('victory1.html', positions=positions, player=winner, no_of_rows=no_of_rows, no_of_columns=no_of_columns)
         if is_game_draw():
-            return render_template('draw.html', positions=positions)
+            return render_template('draw1.html', positions=positions, no_of_rows=no_of_rows, no_of_columns=no_of_columns)
 
     return redirect(url_for("fff"))
 
 
 @app2.route("/fff")
 def fff():
-    return render_template('display.html', positions=positions, player=players[0], enable=switch_conditions())
+    return render_template('display1.html', positions=positions, player=players[0], enable=switch_conditions(), no_of_rows=no_of_rows, no_of_columns=no_of_columns)
 
 
 def is_game_draw():
@@ -90,13 +92,4 @@ def switch_conditions():
     return 1
 
 
-@app2.route("/ddd")
-def lighter():
-    return render_template("checking", positions=[[0, 0, 0], [0, 0, 0], [0, 0, 0]])
-
-
-
-
 app2.run()
-
-
