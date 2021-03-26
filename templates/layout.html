@@ -1,6 +1,7 @@
 <!DOCTYPE html>
     <html>
         <body>
+        {% block status %}{% endblock %}
         <form method="post" action="http://localhost:5000/">
         {% block content %}{% endblock %}
         </form>

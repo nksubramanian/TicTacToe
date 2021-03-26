@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
+{% block status %}<h1>{{ player }} has won </h1>{% endblock %}
 {% block content %}
-        <h1>{{ player }} has won </h1>
         {% for i in range(0, no_of_rows) %}
             <p>
             {% for j in range(0, no_of_columns) %}

@@ -5,6 +5,16 @@ tic_tac_toe = TicTacToe()
 app2 = Flask(__name__)
 
 
+def display():
+    x = 1 if tic_tac_toe.is_relinquishing_starting_turn_possible() else 0
+    return render_template('display1.html',
+                           positions=tic_tac_toe.positions,
+                           player=tic_tac_toe.players[0],
+                           enable=x,
+                           no_of_rows=tic_tac_toe.no_of_rows,
+                           no_of_columns=tic_tac_toe.no_of_columns)
+
+
 @app2.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -18,7 +28,7 @@ def index():
             else:
                 pass
                 #flash an error message
-            return redirect(url_for("fff"))
+            return display()
 
         sub_value_int = int(sub_value)
         y1 = sub_value_int % 3
@@ -38,19 +48,12 @@ def index():
                                    no_of_rows=tic_tac_toe.no_of_rows,
                                    no_of_columns=tic_tac_toe.no_of_columns)
 
-    return redirect(url_for("fff"))
+    return display()
 
 
 @app2.route("/fff")
 def fff():
-    x = 1 if tic_tac_toe.is_relinquishing_starting_turn_possible() else 0
-    return render_template('display1.html',
-                           positions=tic_tac_toe.positions,
-                           player=tic_tac_toe.players[0],
-                           enable=x,
-                           no_of_rows=tic_tac_toe.no_of_rows,
-                           no_of_columns=tic_tac_toe.no_of_columns)
-
+    return display()
 
 
 
