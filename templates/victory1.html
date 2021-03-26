@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block status %}<h1>{{ player }} has won </h1>{% endblock %}
 {% block content %}
+<form method="post" action="/">
         {% for i in range(0, no_of_rows) %}
             <p>
             {% for j in range(0, no_of_columns) %}
@@ -14,7 +15,10 @@
             {% endfor %}
             </p>
         {% endfor %}
+    </form>
+<form method="post" action="/reset">
             <p></p>
             <p></p>
             <button name="sub" type="submit" value="Reset" >Reset</button>
+ </form>
 {% endblock %}
