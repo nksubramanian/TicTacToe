@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from tic_tac_toe import TicTacToe
 
 tic_tac_toe = TicTacToe()
@@ -55,7 +55,7 @@ def index():
                                no_of_rows=tic_tac_toe.no_of_rows,
                                no_of_columns=tic_tac_toe.no_of_columns)
 
-    return display()
+    return redirect(url_for("index"))
 
 
 
