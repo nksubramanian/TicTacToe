@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block status %}<h1>{{ player }}'s turn to play</h1>{% endblock %}
 {% block content %}
-<form method="post" action="/">
+<form method="post" action="/play">
         {% for i in range(0, no_of_rows) %}
             <p>
             {% for j in range(0, no_of_columns) %}

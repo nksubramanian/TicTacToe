@@ -15,7 +15,7 @@ def display():
                            no_of_columns=tic_tac_toe.no_of_columns)
 
 
-@app2.route("/reset", methods=['POST'])
+@app2.route("/rooms/roomid/reset", methods=['POST'])
 def reset():
     tic_tac_toe.reset()
     return display()
@@ -31,11 +31,13 @@ def switch():
     return display()
 
 
-@app2.route("/", methods=['GET', 'POST'])
+@app2.route("/")
 def index():
-    if request.method == 'GET':
-        return display()
+    return display()
 
+
+@app2.route("/play", methods=['POST'])
+def play():
     sub_value = request.form.get('sub')
     sub_value_int = int(sub_value)
     y1 = sub_value_int % 3
@@ -56,8 +58,6 @@ def index():
                                no_of_columns=tic_tac_toe.no_of_columns)
 
     return redirect(url_for("index"))
-
-
 
 
 
