@@ -1,6 +1,7 @@
 class TicTacToe:
 
-    def __init__(self):
+    def __init__(self, room_id):
+        self.room_id = room_id
         self.positions = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.players = ['x', 'o']
         self.no_of_rows = 3

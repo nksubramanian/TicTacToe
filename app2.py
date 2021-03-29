@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 from tic_tac_toe import TicTacToe
 
-tic_tac_toe = TicTacToe()
+#tic_tac_toe = TicTacToe(5)
 app2 = Flask(__name__)
 
 
@@ -12,10 +12,11 @@ def display():
                            player=tic_tac_toe.players[0],
                            enable=x,
                            no_of_rows=tic_tac_toe.no_of_rows,
-                           no_of_columns=tic_tac_toe.no_of_columns)
+                           no_of_columns=tic_tac_toe.no_of_columns,
+                           user=tic_tac_toe.room_id )
 
 
-@app2.route("/rooms/roomid/reset", methods=['POST'])
+@app2.route("/reset", methods=['POST'])
 def reset():
     tic_tac_toe.reset()
     return display()
@@ -60,23 +61,38 @@ def play():
     return redirect(url_for("index"))
 
 
+@app2.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        user = request.form['nm']
+        global tic_tac_toe
+        tic_tac_toe = TicTacToe(user)
+        return temp()
 
 
+@app2.route("/home")
+def checking():
+    return render_template("home_page.html")
 
 
+@app2.route("/temp", methods=['POST'])
+def gameOptions():
+    print(request.method)
+    if request.method == 'POST':
+        if request.form.get('Enter old room') == 'Enter old room':
+            return "Enter old room"
+        elif request.form.get('Create new room') == 'Create new room':
+            return redirect(url_for("new_room"))
 
 
+@app2.route("/createnewroom")
+def new_room():
+    return render_template("newroom.html")
 
 
-
-
-
-
-
-
-
-
-
+@app2.route("/checkname")
+def temp():
+    return display()
 
 
 app2.run()
