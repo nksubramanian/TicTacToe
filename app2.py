@@ -3,17 +3,20 @@ from tic_tac_toe import TicTacToe
 
 #tic_tac_toe = TicTacToe(5)
 app2 = Flask(__name__)
+object_list = []
 
 
-def display():
-    x = 1 if tic_tac_toe.is_relinquishing_starting_turn_possible() else 0
+@app2.route('/display/<i>')
+def display(i):
+    ii=int(i)
+    x = 1 if object_list[ii].is_relinquishing_starting_turn_possible() else 0
     return render_template('display1.html',
-                           positions=tic_tac_toe.positions,
-                           player=tic_tac_toe.players[0],
+                           positions=object_list[ii].positions,
+                           player=object_list[ii].players[0],
                            enable=x,
-                           no_of_rows=tic_tac_toe.no_of_rows,
-                           no_of_columns=tic_tac_toe.no_of_columns,
-                           user=tic_tac_toe.room_id )
+                           no_of_rows=object_list[ii].no_of_rows,
+                           no_of_columns=object_list[ii].no_of_columns,
+                           user=ii)
 
 
 @app2.route("/reset", methods=['POST'])
@@ -32,19 +35,20 @@ def switch():
     return display()
 
 
-@app2.route("/")
-def index():
-    return display()
+@app2.route("/<i>")
+def index(i):
+    return display(i)
 
 
-@app2.route("/play", methods=['POST'])
-def play():
+@app2.route("/play/<i>", methods=['POST'])
+def play(i):
+    ii = int(i)
     sub_value = request.form.get('sub')
     sub_value_int = int(sub_value)
     y1 = sub_value_int % 3
     x1 = sub_value_int // 3
-    tic_tac_toe.play(x1, y1)
-    winner = tic_tac_toe.get_winner()
+    object_list[ii].play(x1, y1)
+    winner = object_list[ii].get_winner()
     if winner is not None:
         return render_template('victory1.html',
                                positions=tic_tac_toe.positions,
@@ -58,7 +62,7 @@ def play():
                                no_of_rows=tic_tac_toe.no_of_rows,
                                no_of_columns=tic_tac_toe.no_of_columns)
 
-    return redirect(url_for("index"))
+    return redirect(url_for("index",i = i))
 
 
 @app2.route('/login', methods=['POST'])
@@ -67,7 +71,9 @@ def login():
         user = request.form['nm']
         global tic_tac_toe
         tic_tac_toe = TicTacToe(user)
-        return temp()
+        object_list.append(TicTacToe(user))
+        return None
+        #return temp()
 
 
 @app2.route("/home")
@@ -76,11 +82,11 @@ def checking():
 
 
 @app2.route("/temp", methods=['POST'])
-def gameOptions():
+def GameOptions():
     print(request.method)
     if request.method == 'POST':
         if request.form.get('Enter old room') == 'Enter old room':
-            return "Enter old room"
+            return redirect(url_for("old_room"))
         elif request.form.get('Create new room') == 'Create new room':
             return redirect(url_for("new_room"))
 
@@ -90,9 +96,21 @@ def new_room():
     return render_template("newroom.html")
 
 
-@app2.route("/checkname")
-def temp():
-    return display()
+@app2.route("/checkname/<i>")
+def temp(i):
+    return display(i)
+
+
+@app2.route('/oldroominput', methods=['POST'])
+def oldroominput():
+    if request.method == 'POST':
+        i = request.form['nm']
+        return redirect(url_for('temp', i=i))
+
+
+@app2.route("/oldroom")
+def old_room():
+    return render_template("oldroom.html")
 
 
 app2.run()
