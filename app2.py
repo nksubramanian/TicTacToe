@@ -69,7 +69,10 @@ def play(i):
 def login():
     if request.method == 'POST':
         user = request.form['nm']
-        object_list[user] = TicTacToe(user)
+        if user in object_list:
+            pass # already exists
+        else:
+            object_list[user] = TicTacToe(user)
         #object_list.append(TicTacToe(user))
         return None
 
