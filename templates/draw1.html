@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block status %}<h1>It's a draw</h1>{% endblock %}
 {% block content %}
-<form method="post" action="/play">
+<form method="post" action="/play/{{ user }}">
          <h1>it's a draw</h1>
         {% for i in range(0, no_of_rows) %}
             <p>
@@ -17,7 +17,7 @@
             </p>
         {% endfor %}
     </form>
-<form method="post" action="/reset">
+<form method="post" action="/reset/{{ user }}">
             <button name="sub" type="submit" value="Reset" >Reset</button>
     </form>
 {% endblock %}
