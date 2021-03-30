@@ -3,12 +3,11 @@ from tic_tac_toe import TicTacToe
 
 
 app2 = Flask(__name__)
-object_list = []
+object_list = {}
 
 
-@app2.route('/display/<int:i>')
+@app2.route('/display/<i>')
 def display(i):
-    i = int(i)
     x = 1 if object_list[i].is_relinquishing_starting_turn_possible() else 0
     return render_template('display1.html',
                            positions=object_list[i].positions,
@@ -19,13 +18,13 @@ def display(i):
                            user=i)
 
 
-@app2.route("/reset/<int:i>", methods=['POST'])
+@app2.route("/reset/<i>", methods=['POST'])
 def reset(i):
     object_list[i].reset()
     return redirect(url_for("display", i=i))
 
 
-@app2.route("/switch/<int:i>", methods=['POST'])
+@app2.route("/switch/<i>", methods=['POST'])
 def switch(i):
     if object_list[i].is_relinquishing_starting_turn_possible():
         object_list[i].relinquish_starting_turn()
@@ -35,14 +34,13 @@ def switch(i):
     return redirect(url_for("display", i=i))
 
 
-@app2.route("/<int:i>")
+@app2.route("/<i>")
 def index(i):
     return display(i)
 
 
-@app2.route("/play/<int:i>", methods=['POST'])
+@app2.route("/play/<i>", methods=['POST'])
 def play(i):
-    i = int(i)
     sub_value = request.form.get('sub')
     sub_value_int = int(sub_value)
     y1 = sub_value_int % 3
@@ -71,9 +69,8 @@ def play(i):
 def login():
     if request.method == 'POST':
         user = request.form['nm']
-        #global tic_tac_toe
-        #tic_tac_toe = TicTacToe(user)
-        object_list.append(TicTacToe(user))
+        object_list[user] = TicTacToe(user)
+        #object_list.append(TicTacToe(user))
         return None
 
 
@@ -107,7 +104,10 @@ def temp(i):
 def oldroominput():
     if request.method == 'POST':
         i = request.form['nm']
-        return redirect(url_for('temp', i=i))
+        if i in object_list:
+            return redirect(url_for('temp', i=i))
+        else:
+            pass #flash enter valid room
 
 
 @app2.route("/oldroom")
