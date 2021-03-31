@@ -85,10 +85,6 @@ def new_room():
     return render_template("newroom.html")
 
 
-@app2.route("/checkname/<i>")
-def temp(i):
-    return display(i, message=str(object_list[i].players[0]) + "'s turn to play")
-
 
 @app2.route('/oldroominput', methods=['POST'])
 def oldroominput():
