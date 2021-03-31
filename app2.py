@@ -21,7 +21,7 @@ def display(i):
 @app2.route("/reset/<i>", methods=['POST'])
 def reset(i):
     object_list[i].reset()
-    return redirect(url_for("display", i=i))
+    return display(i)
 
 
 @app2.route("/switch/<i>", methods=['POST'])
@@ -67,17 +67,13 @@ def play(i):
 
 @app2.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        user = request.form['nm']
-        if user in object_list:
-            pass # already exists
-        else:
-            object_list[user] = TicTacToe(user)
-        #object_list.append(TicTacToe(user))
-        return None
+    user = request.form['nm']
+    if user not in object_list:
+        object_list[user] = TicTacToe(user)
+    return display(user)
 
 
-
+@app2.route("/")
 @app2.route("/home")
 def checking():
     return render_template("home_page.html")
