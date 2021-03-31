@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 from tic_tac_toe import TicTacToe
 
 
@@ -11,7 +11,7 @@ def display(i):
     x = 1 if object_list[i].is_relinquishing_starting_turn_possible() else 0
     return render_template('display1.html',
                            positions=object_list[i].positions,
-                           player=object_list[i].players[0],
+                           message=str(object_list[i].players[0])+"'s turn to play",
                            enable=x,
                            no_of_rows=object_list[i].no_of_rows,
                            no_of_columns=object_list[i].no_of_columns,
@@ -30,8 +30,7 @@ def switch(i):
         object_list[i].relinquish_starting_turn()
     else:
         pass
-        # flash an error message
-    return redirect(url_for("display", i=i))
+    display(i)
 
 
 @app2.route("/<i>")
@@ -48,16 +47,17 @@ def play(i):
     object_list[i].play(x1, y1)
     winner = object_list[i].get_winner()
     if winner is not None:
-        return render_template('victory1.html',
+        return render_template('display1.html',
                                positions=object_list[i].positions,
-                               player=winner,
+                               player=str(winner) + " has won",
                                no_of_rows=object_list[i].no_of_rows,
                                no_of_columns=object_list[i].no_of_columns,
                                user=i)
 
     if object_list[i].is_game_draw():
-        return render_template('draw1.html',
+        return render_template('display1.html',
                                positions=object_list[i].positions,
+                               player="it is a draw",
                                no_of_rows=object_list[i].no_of_rows,
                                no_of_columns=object_list[i].no_of_columns,
                                user=i)
