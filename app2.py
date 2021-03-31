@@ -7,12 +7,12 @@ object_list = {}
 
 
 @app2.route('/display/<i>')
-def display(i):
+def display(i, message):
     x = 1 if object_list[i].is_relinquishing_starting_turn_possible() else 0
     return render_template('display1.html',
                            positions=object_list[i].positions,
-                           message=str(object_list[i].players[0])+"'s turn to play",
-                           enable=x,
+                           message=message,
+                           enable_switch=x,
                            no_of_rows=object_list[i].no_of_rows,
                            no_of_columns=object_list[i].no_of_columns,
                            user=i)
@@ -21,7 +21,7 @@ def display(i):
 @app2.route("/reset/<i>", methods=['POST'])
 def reset(i):
     object_list[i].reset()
-    return display(i)
+    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
 
 
 @app2.route("/switch/<i>", methods=['POST'])
@@ -30,12 +30,13 @@ def switch(i):
         object_list[i].relinquish_starting_turn()
     else:
         pass
-    display(i)
+    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
+
 
 
 @app2.route("/<i>")
 def index(i):
-    return display(i)
+    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
 
 
 @app2.route("/play/<i>", methods=['POST'])
@@ -47,20 +48,10 @@ def play(i):
     object_list[i].play(x1, y1)
     winner = object_list[i].get_winner()
     if winner is not None:
-        return render_template('display1.html',
-                               positions=object_list[i].positions,
-                               player=str(winner) + " has won",
-                               no_of_rows=object_list[i].no_of_rows,
-                               no_of_columns=object_list[i].no_of_columns,
-                               user=i)
+        return display(i, message=str(winner) + " has won")
 
     if object_list[i].is_game_draw():
-        return render_template('display1.html',
-                               positions=object_list[i].positions,
-                               player="it is a draw",
-                               no_of_rows=object_list[i].no_of_rows,
-                               no_of_columns=object_list[i].no_of_columns,
-                               user=i)
+        return display(i, message="it is a draw")
 
     return redirect(url_for("index", i=i))
 
@@ -70,7 +61,7 @@ def login():
     user = request.form['nm']
     if user not in object_list:
         object_list[user] = TicTacToe(user)
-    return display(user)
+    return display(user, message=str(object_list[user].players[0])+"'s turn to play")
 
 
 @app2.route("/")
@@ -96,7 +87,7 @@ def new_room():
 
 @app2.route("/checkname/<i>")
 def temp(i):
-    return display(i)
+    return display(i, message=str(object_list[i].players[0]) + "'s turn to play")
 
 
 @app2.route('/oldroominput', methods=['POST'])
@@ -104,9 +95,9 @@ def oldroominput():
     if request.method == 'POST':
         i = request.form['nm']
         if i in object_list:
-            return redirect(url_for('temp', i=i))
+            return display(i, message=str(object_list[i].players[0]) + "'s turn to play")
         else:
-            pass #flash enter valid room
+            return "There is no such room"
 
 
 @app2.route("/oldroom")

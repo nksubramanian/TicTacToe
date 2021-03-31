@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% block status %}
 <h1>{{ message }}</h1>
-<h2>{{ user }}</h2>
-<h3>"/play/{{ user }}"</h3>
-
-
 {% endblock %}
 {% block content %}
 <form method="post" action="/play/{{ user }}">
@@ -29,7 +25,7 @@
             <button name="sub" type="submit" value="Reset" >Reset</button>
  </form>
 <form method="post" action="/switch/{{ user }}">
-            {% if enable == 1 %}
+            {% if enable_switch == 1 %}
                 <button name="sub" type="submit" value="Switch" >Switch</button>
             {% else %}
                 <button name="sub" type="submit" value="Switch" disabled>Switch</button>
