@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block status %}
+<h1>Room No is {{ user }}</h1>
 <h1>{{ message }}</h1>
 {% endblock %}
 {% block content %}
@@ -31,4 +32,10 @@
                 <button name="sub" type="submit" value="Switch" disabled>Switch</button>
             {% endif %}
 </form>
+
+<form method="post" action="/home/{{ user }}">
+    <button name="sub" type="submit" value="backhome" >Home</button>
+</form>
+
+
 {% endblock %}

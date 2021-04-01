@@ -1,9 +1,17 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for
 from tic_tac_toe import TicTacToe
-
+import random
 
 app2 = Flask(__name__)
 object_list = {}
+
+
+def game_messsage(i):
+    return str(object_list[i].players[0])+"'s turn to play"
+
+
+def play_message(i):
+    return str(object_list[i].players[0])+"'s turn to play"
 
 
 @app2.route('/display/<i>')
@@ -21,8 +29,7 @@ def display(i, message):
 @app2.route("/reset/<i>", methods=['POST'])
 def reset(i):
     object_list[i].reset()
-    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
-
+    return display(i, message=play_message(i))
 
 @app2.route("/switch/<i>", methods=['POST'])
 def switch(i):
@@ -30,13 +37,12 @@ def switch(i):
         object_list[i].relinquish_starting_turn()
     else:
         pass
-    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
-
+    return display(i, message=play_message(i))
 
 
 @app2.route("/<i>")
 def index(i):
-    return display(i, message=str(object_list[i].players[0])+"'s turn to play")
+    return display(i, message=play_message(i))
 
 
 @app2.route("/play/<i>", methods=['POST'])
@@ -58,32 +64,25 @@ def play(i):
 
 @app2.route('/login', methods=['POST'])
 def login():
-    user = request.form['nm']
+    user = str(random.randint(1000, 9999))+"-"+str(random.randint(1000, 9999))
     if user not in object_list:
         object_list[user] = TicTacToe(user)
-    return display(user, message=str(object_list[user].players[0])+"'s turn to play")
+        return display(user, message=play_message(user))
 
 
 @app2.route("/")
-@app2.route("/home")
 def checking():
     return render_template("home_page.html")
 
 
 @app2.route("/temp", methods=['POST'])
-def GameOptions():
+def game_options():
     print(request.method)
     if request.method == 'POST':
         if request.form.get('Enter old room') == 'Enter old room':
-            return redirect(url_for("old_room"))
+            return old_room()
         elif request.form.get('Create new room') == 'Create new room':
-            return redirect(url_for("new_room"))
-
-
-@app2.route("/createnewroom")
-def new_room():
-    return render_template("newroom.html")
-
+            return login()
 
 
 @app2.route('/oldroominput', methods=['POST'])
@@ -91,7 +90,7 @@ def oldroominput():
     if request.method == 'POST':
         i = request.form['nm']
         if i in object_list:
-            return display(i, message=str(object_list[i].players[0]) + "'s turn to play")
+            return display(i, message=play_message(i))
         else:
             return "There is no such room"
 
@@ -99,6 +98,14 @@ def oldroominput():
 @app2.route("/oldroom")
 def old_room():
     return render_template("oldroom.html")
+
+
+@app2.route("/home", methods=['POST'])
+@app2.route("/home/<i>", methods=['POST'])
+def backhome(i="hjgasg"):
+    return checking()
+
+
 
 
 app2.run()
