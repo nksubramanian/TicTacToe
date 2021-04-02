@@ -31,6 +31,7 @@ def reset(i):
     object_list[i].reset()
     return display(i, message=play_message(i))
 
+
 @app2.route("/switch/<i>", methods=['POST'])
 def switch(i):
     if object_list[i].is_relinquishing_starting_turn_possible():
