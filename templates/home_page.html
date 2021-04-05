@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <body>
+
 <script>
   function onCreate() {
   var xhttp = new XMLHttpRequest();
@@ -24,7 +25,7 @@ function OnJoin() {
         }
         if (this.readyState == 4 && this.status == 404) {
             textcontrol.value = '';
-            alert("wrong room Id");
+            document.getElementById("demo").innerHTML = "No such room exists";
         }
     };
     xhttp.open("GET", "/games/"+room_id, true);
@@ -51,5 +52,6 @@ function onJehboin() {
 
                 <button onclick="onCreate()">Create Room</button>
 
+    <div id="demo"></div>
     </body>
 </html>
