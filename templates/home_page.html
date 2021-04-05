@@ -14,27 +14,42 @@
   xhttp.send();
 }
 
+function OnJoin() {
+    var textcontrol = document.getElementById("txtname");
+    var room_id = textcontrol.value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.location.href = "/ui/games/" + room_id
+        }
+        if (this.readyState == 4 && this.status == 404) {
+            textcontrol.value = '';
+            alert("wrong room Id");
+        }
+    };
+    xhttp.open("GET", "/games/"+room_id, true);
+    xhttp.send();
+}
 
 
 
 
 
-
-function onJoin() {
+function onJehboin() {
   //read the text box for room id
   //Call the get games end point to check if the room exists (ajax)
   //If the room exists navigate to the room path
   //else remove the content of the text box and display an error message
   window.location.href = "/ui/games/abc"
 }
+
+
 </script>
-                <input type="text" id="fname" name="fname"><br><br>
+
+ <input type="text" id="txtname" />
+    <input type="button" id="btnsubmit" onclick="OnJoin()" value="Submit" />
 
                 <button onclick="onCreate()">Create Room</button>
-                <button onclick="onJoin()">Join Room</button>
-
-
-
 
     </body>
 </html>
