@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 from tic_tac_toe import TicTacToe
 import random
 
@@ -17,13 +17,7 @@ def play_message(i):
 @app2.route('/display/<i>')
 def display(i, message):
     x = 1 if object_list[i].is_relinquishing_starting_turn_possible() else 0
-    return render_template('display1.html',
-                           positions=object_list[i].positions,
-                           message=message,
-                           enable_switch=x,
-                           no_of_rows=object_list[i].no_of_rows,
-                           no_of_columns=object_list[i].no_of_columns,
-                           user=i)
+    return jsonify({'board': object_list[i].positions, 'player_to_play': i})
 
 
 @app2.route("/reset/<i>", methods=['POST'])
@@ -105,7 +99,6 @@ def old_room():
 @app2.route("/home/<i>", methods=['POST'])
 def backhome(i="hjgasg"):
     return checking()
-
 
 
 
