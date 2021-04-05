@@ -3,13 +3,29 @@
     <body>
 <script>
   function onCreate() {
-  console.log("On create called");
-  return;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4) {
+     var data = JSON.parse(this.responseText);
+     window.location.href = "/ui/games/" + data.room_id
+     }
+  };
+  xhttp.open("POST", "/games", true);
+  xhttp.send();
 }
 
+
+
+
+
+
+
 function onJoin() {
-  console.log("On join called");
-  return;
+  //read the text box for room id
+  //Call the get games end point to check if the room exists (ajax)
+  //If the room exists navigate to the room path
+  //else remove the content of the text box and display an error message
+  window.location.href = "/ui/games/abc"
 }
 </script>
                 <input type="text" id="fname" name="fname"><br><br>
