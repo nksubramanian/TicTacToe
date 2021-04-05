@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html>
     <body>
+<script>
+  function onCreate() {
+  console.log("On create called");
+  return;
+}
 
-        <form method="post" action="/temp">
+function onJoin() {
+  console.log("On join called");
+  return;
+}
+</script>
+                <input type="text" id="fname" name="fname"><br><br>
 
-                <input type="submit" value="Enter old room" name="Enter old room"/>
-                <input type="submit" value="Create new room" name="Create new room" />
+                <button onclick="onCreate()">Create Room</button>
+                <button onclick="onJoin()">Join Room</button>
 
-        </form>
+
+
+
     </body>
 </html>

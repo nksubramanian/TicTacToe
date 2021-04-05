@@ -62,6 +62,13 @@ def relinquish_first_turn(room_id):
     return {'error': "unable to relinquish turn"}, 400
 
 
+@app2.route("/")
+def home():
+    return render_template("home_page.html")
 
+
+@app2.route("/ui/games/<string:id>")
+def game(id):
+    return id
 
 app2.run()
