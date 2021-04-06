@@ -17,7 +17,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="javascript:refresh()">
 <script>
 var room_id = '{{room_id}}';
 
@@ -127,7 +127,7 @@ function refresh() {
 <span><button name="sub" type="submit" value="Reset" onclick="onReset(value)">Reset</button></span>
 <span><button name="sub" type="submit" value="Relinquish" onclick="onRelinquish(value)">Relinquish</button></span>
 <span><button name="sub" type="submit" value="Home" onclick="onHome()">Home</button></span>
-    <span><button name="sub" type="submit" value="Home" onclick="refresh()">Refresh</button></span>
+
 </p>
 </div>
 
