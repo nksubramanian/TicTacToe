@@ -3,9 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .cell {
+
+           cursor: pointer;
+           display: inline;
+           border: 5px solid red;
+           padding: 0px;
+           margin: 0px; width:10px
+
+        }
+    </style>
 </head>
 <body>
-    <div><span>Room ID:</span>{{room_id}}</div>
-    <div id="displaymessage">Loading Please Wait</div>
+<script>
+function OnPlay(value) {
+  alert(value)
+  console.log(value)
+}
+
+function OnReset(value) {
+  alert(value)
+  console.log(value)
+}
+
+function OnSwitch(value) {
+  alert(value)
+  console.log(value)
+}
+
+function OnHome() {
+    location.replace("/")
+}
+
+var room_id = {{room_id}}
+
+</script>
+
+<div><span>Room ID:</span>{{room_id}}</div>
+<div id="displaymessage">Loading Please Wait</div>
+
+<div>
+<p>
+<div class="cell" onclick="OnPlay(1);">&nbsp;</div><div class="cell" onclick="OnPlay(2);">&nbsp;</div><div class="cell" onclick="OnPlay(3);">&nbsp;</div>
+<div></div>
+<div class="cell" onclick="OnPlay(4);">&nbsp;</div><div class="cell" onclick="OnPlay(5);">&nbsp;</div><div class="cell" onclick="OnPlay(6);">&nbsp;</div>
+<div></div>
+<div class="cell" onclick="OnPlay(7);">&nbsp;</div><div class="cell" onclick="OnPlay(8);">&nbsp;</div><div class="cell" onclick="OnPlay(9);">&nbsp;</div>
+</p>
+</div>
+
+
+
+<div>
+<p>
+<span><button name="sub" type="submit" value="Reset" onclick="OnReset(value)">Reset</button></span>
+<span><button name="sub" type="submit" value="Switch" onclick="OnSwitch(value)">Switch</button></span>
+<span><button name="sub" type="submit" value="Home" onclick="OnHome()">Home</button></span>
+</p>
+</div>
+
+
+
+
 </body>
 </html>
