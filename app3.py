@@ -72,4 +72,6 @@ def game(id):
     return id
 
 
-app2.run(port=80)
+if __name__ == '__main__':
+    app2.run(debug=True, host='0.0.0.0', port=80)
+
