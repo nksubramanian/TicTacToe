@@ -17,7 +17,7 @@
         }
     </style>
 </head>
-<body onload="javascript:refresh()">
+<body onload="javascript:onLoad()">
 <script>
 var room_id = '{{room_id}}';
 
@@ -104,7 +104,10 @@ function refresh() {
     xmlhttp.send();
 }
 
-
+function onLoad() {
+    refresh();
+    setInterval(function(){ refresh(); }, 5000);
+}
 
 </script>
 <div id="demo"></div>

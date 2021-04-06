@@ -39,7 +39,7 @@ class TicTacToe:
                 return None
         return val
 
-    def get_winner(self):
+    def (self):
         winning_patterns = [[(0, 0), (1, 1), (2, 2)],
                             [(0, 0), (0, 1), (0, 2)],
                             [(1, 0), (1, 1), (1, 2)],
