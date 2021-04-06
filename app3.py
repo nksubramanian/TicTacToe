@@ -71,4 +71,5 @@ def home():
 def game(id):
     return id
 
-app2.run()
+
+app2.run(port=80)
