@@ -7,7 +7,9 @@
         .cell {
 
            cursor: pointer;
-           display: inline;
+           display: inline-block;
+           width: 200px;
+           height: 10px;
            border: 5px solid red;
            padding: 0px;
            margin: 0px; width:10px
@@ -17,54 +19,117 @@
 </head>
 <body>
 <script>
-function OnPlay(value) {
+var room_id = '{{room_id}}';
+
+function onPlay(value) {
+    var payload = {'cell': value};
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            render(this.responseText);
+        }
+    };
+    xmlhttp.open("POST","/games/"+room_id+"/play", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify(payload));
+}
+
+function onReset(value) {
   alert(value)
   console.log(value)
 }
 
-function OnReset(value) {
-  alert(value)
-  console.log(value)
+function onRelinquish(value) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            render(this.responseText);
+        }
+    };
+    xmlhttp.open("POST","/games/"+room_id+"/relinquish-first-turn", true);
+    xmlhttp.send();
+
+
+
 }
 
-function OnSwitch(value) {
-  alert(value)
-  console.log(value)
+
+function onReset(value) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            render(this.responseText);
+        }
+    };
+    xmlhttp.open("POST","/games/"+room_id+"/reset", true);
+    xmlhttp.send();
+
+
 }
 
-function OnHome() {
+function onHome() {
     location.replace("/")
 }
 
-var room_id = {{room_id}}
+function convert(x) {
+    if(x == '0' || x == 0){
+        return ' '
+    }
+    return x
+}
+
+function render(response){
+    var myObj = JSON.parse(response);
+    document.getElementById("a").innerHTML = convert(myObj.board[0][0]);
+    document.getElementById("b").innerHTML = convert(myObj.board[0][1]);
+    document.getElementById("c").innerHTML = convert(myObj.board[0][2]);
+    document.getElementById("d").innerHTML = convert(myObj.board[1][0]);
+    document.getElementById("e").innerHTML = convert(myObj.board[1][1]);
+    document.getElementById("f").innerHTML = convert(myObj.board[1][2]);
+    document.getElementById("g").innerHTML = convert(myObj.board[2][0]);
+    document.getElementById("h").innerHTML = convert(myObj.board[2][1]);
+    document.getElementById("i").innerHTML = convert(myObj.board[2][2]);
+    document.getElementById("demo").innerHTML = myObj.player_to_play+ " has to play";
+}
+
+
+function refresh() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            render(this.responseText);
+        }
+    };
+    xmlhttp.open("GET","/games/"+room_id, true);
+    xmlhttp.send();
+}
+
+
 
 </script>
-
+<div id="demo"></div>
 <div><span>Room ID:</span>{{room_id}}</div>
 <div id="displaymessage">Loading Please Wait</div>
 
 <div>
-<p>
-<div class="cell" onclick="OnPlay(1);">&nbsp;</div><div class="cell" onclick="OnPlay(2);">&nbsp;</div><div class="cell" onclick="OnPlay(3);">&nbsp;</div>
-<div></div>
-<div class="cell" onclick="OnPlay(4);">&nbsp;</div><div class="cell" onclick="OnPlay(5);">&nbsp;</div><div class="cell" onclick="OnPlay(6);">&nbsp;</div>
-<div></div>
-<div class="cell" onclick="OnPlay(7);">&nbsp;</div><div class="cell" onclick="OnPlay(8);">&nbsp;</div><div class="cell" onclick="OnPlay(9);">&nbsp;</div>
-</p>
-</div>
 
+<div id="a" class="cell" onclick="onPlay(0) ;">-</div><div id="b" class="cell" onclick="onPlay(1);">-</div><div id="c" class="cell" onclick="onPlay(2);">-</div>
+<div></div>
+<div id="d" class="cell" onclick="onPlay(3);">-</div><div id="e" class="cell" onclick="onPlay(4);">-</div><div id="f" class="cell" onclick="onPlay(5);">-</div>
+<div></div>
+<div id="g" class="cell" onclick="onPlay(6);">-</div><div id="h" class="cell" onclick="onPlay(7);">-</div><div id="i" class="cell" onclick="onPlay(8);">-</div>
+
+</div>
 
 
 <div>
 <p>
-<span><button name="sub" type="submit" value="Reset" onclick="OnReset(value)">Reset</button></span>
-<span><button name="sub" type="submit" value="Switch" onclick="OnSwitch(value)">Switch</button></span>
-<span><button name="sub" type="submit" value="Home" onclick="OnHome()">Home</button></span>
+<span><button name="sub" type="submit" value="Reset" onclick="onReset(value)">Reset</button></span>
+<span><button name="sub" type="submit" value="Relinquish" onclick="onRelinquish(value)">Relinquish</button></span>
+<span><button name="sub" type="submit" value="Home" onclick="onHome()">Home</button></span>
+    <span><button name="sub" type="submit" value="Home" onclick="refresh()">Refresh</button></span>
 </p>
 </div>
-
-
-
 
 </body>
 </html>

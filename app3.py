@@ -6,6 +6,13 @@ app2 = Flask(__name__)
 rooms = {}
 
 
+def conclusion(room):
+    return {'board': room.positions,
+            'player_to_play': room.players[0],
+            "draw_status": room.is_game_draw(),
+            "who_won": room.get_winner()}
+
+
 def create_random_string():
     return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
 
@@ -24,9 +31,11 @@ def get_game(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
-    return jsonify({'board': room.positions, 'player_to_play': room.players[0]})
+    return jsonify(conclusion(room))
+
     #status of the game (in progress, won, draw)
     #Winner
+
 
 
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
@@ -35,7 +44,7 @@ def reset_game(room_id):
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
     room.reset()
-    return jsonify({'board': room.positions, 'player_to_play': room.players[0]})
+    return jsonify(conclusion(room))
 
 
 @app2.route('/games/<string:room_id>/play', methods=['POST'])
@@ -48,7 +57,7 @@ def play_game(room_id):
     y = cell % 3
     x = cell // 3
     room.play(x, y)
-    return jsonify({'board': room.positions, 'player_to_play': room.players[0]})
+    return jsonify(conclusion(room))
 
 
 @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
@@ -58,7 +67,7 @@ def relinquish_first_turn(room_id):
     room = rooms[room_id]
     if room.is_relinquishing_starting_turn_possible():
         room.relinquish_starting_turn()
-        return jsonify({'board': room.positions, 'player_to_play': room.players[0]})
+        return jsonify(conclusion(room))
     return {'error': "unable to relinquish turn"}, 400
 
 
