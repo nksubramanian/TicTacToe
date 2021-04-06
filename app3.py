@@ -8,9 +8,10 @@ rooms = {}
 
 def conclusion(room):
     return {'board': room.positions,
-            'player_to_play': room.players[0],
-            "draw_status": room.is_game_draw(),
-            "who_won": room.get_winner()}
+            'player_to_play': room.player_to_play(),
+            "is_draw": room.is_game_draw(),
+            "who_won": room.get_winner()
+            }
 
 
 def create_random_string():

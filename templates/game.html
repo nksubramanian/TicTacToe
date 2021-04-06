@@ -89,7 +89,17 @@ function render(response){
     document.getElementById("g").innerHTML = convert(myObj.board[2][0]);
     document.getElementById("h").innerHTML = convert(myObj.board[2][1]);
     document.getElementById("i").innerHTML = convert(myObj.board[2][2]);
-    document.getElementById("demo").innerHTML = myObj.player_to_play+ " has to play";
+    var message = "";
+    if(myObj.is_draw){
+        message = "The game is draw";
+    }else if(myObj.who_won != null){
+        message = myObj.who_won+" won the game";
+    }else{
+        message = myObj.player_to_play + "'s turn to play";
+    }
+    document.getElementById("demo").innerHTML = message;
+    console.log(message);
+
 }
 
 
@@ -110,9 +120,11 @@ function onLoad() {
 }
 
 </script>
+<div id="whowon"></div>
+<div id="draw"></div>
 <div id="demo"></div>
 <div><span>Room ID:</span>{{room_id}}</div>
-<div id="displaymessage">Loading Please Wait</div>
+
 
 <div>
 
@@ -127,9 +139,9 @@ function onLoad() {
 
 <div>
 <p>
-<span><button name="sub" type="submit" value="Reset" onclick="onReset(value)">Reset</button></span>
-<span><button name="sub" type="submit" value="Relinquish" onclick="onRelinquish(value)">Relinquish</button></span>
-<span><button name="sub" type="submit" value="Home" onclick="onHome()">Home</button></span>
+<span><button onclick="onReset(value)">Reset</button></span>
+<span><button onclick="onRelinquish(value)">Relinquish</button></span>
+<span><button onclick="onHome()">Home</button></span>
 
 </p>
 </div>

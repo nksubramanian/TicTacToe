@@ -56,8 +56,19 @@ class TicTacToe:
         return None
 
     def is_game_draw(self):
-        for rows in self.positions:
-            for element in rows:
-                if element == 0:
-                    return False
+        if self.get_winner() in ['x','o']:
+            return False
+        else:
+            for rows in self.positions:
+                for element in rows:
+                    if element == 0:
+                        return False
         return True
+
+    def player_to_play(self):
+        if self.is_game_draw():
+            return None
+        elif self.get_winner() is not None:
+            return None
+        else:
+            return self.players[0]
