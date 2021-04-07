@@ -42,9 +42,12 @@ def get_game(room_id):
     #Winner
 
 
-
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
 def reset_game(room_id):
+    authorization_value = request.headers.get('Authorization')
+    if authorization_value is None or "Bearer" not in authorization_value:
+        return {'error': "access denied"}, 401
+    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
