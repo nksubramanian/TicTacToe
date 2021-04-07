@@ -35,7 +35,7 @@ function OnJoin() {
             document.getElementById("demo").innerHTML = "No such room exists";
         }
     };
-    xhttp.open("GET", "/games/"+room_id, true);
+    xhttp.open("POST", "/games/"+room_id+"/join", true);
     xhttp.send();
 }
 
