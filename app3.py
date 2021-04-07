@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
+import jwt
+import json
 
 from tic_tac_toe import TicTacToe
 import random
@@ -18,12 +20,24 @@ def conclusion(room):
             }
 
 
-def is_authorized(authorization_value):
-    return (authorization_value is not None) and ("Bearer" in authorization_value)
+secret = "secretxyz"
+
+
+def get_claim(r):
+    authorization_value = r.headers.get('Authorization')
+    try:
+        return jwt.decode(authorization_value[7:], secret, verify=True)
+    except Exception as e:
+        print(e)
+        return None
 
 
 def create_random_string():
     return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
+
+
+def get_token(room_id):
+    return jwt.encode({"room_id": room_id}, secret, algorithm="HS256").decode('UTF-8')
 
 
 @app2.route('/games', methods=["POST"])
@@ -32,15 +46,14 @@ def create_game():
     while room_id in rooms.keys():
         room_id = create_random_string()
     rooms[room_id] = TicTacToe(room_id)
-    return jsonify({'room_id': room_id, "token": "helloworldxyz"}), 202
+    return jsonify({'room_id': room_id, "token": get_token(room_id)}), 202
 
 
 @app2.route('/games/<string:room_id>')
 def get_game(room_id):
-    authorization_value = request.headers.get('Authorization')
-    if not is_authorized(authorization_value):
+    claim = get_claim(request)
+    if claim is None or room_id != claim["room_id"]:
         return {'error': "access denied"}, 401
-    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -52,10 +65,9 @@ def get_game(room_id):
 
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
 def reset_game(room_id):
-    authorization_value = request.headers.get('Authorization')
-    if not is_authorized(authorization_value):
+    claim = get_claim(request)
+    if claim is None or room_id != claim.room_id:
         return {'error': "access denied"}, 401
-    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -65,10 +77,9 @@ def reset_game(room_id):
 
 @app2.route('/games/<string:room_id>/play', methods=['POST'])
 def play_game(room_id):
-    authorization_value = request.headers.get('Authorization')
-    if not is_authorized(authorization_value):
+    claim = get_claim(request)
+    if claim is None or room_id != claim.room_id:
         return {'error': "access denied"}, 401
-    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -82,10 +93,9 @@ def play_game(room_id):
 
 @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
 def relinquish_first_turn(room_id):
-    authorization_value = request.headers.get('Authorization')
-    if not is_authorized(authorization_value):
+    claim = get_claim(request)
+    if claim is None or room_id != claim.room_id:
         return {'error': "access denied"}, 401
-    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -93,6 +103,13 @@ def relinquish_first_turn(room_id):
         room.relinquish_starting_turn()
         return jsonify(conclusion(room))
     return {'error': "unable to relinquish turn"}, 400
+
+
+@app2.route("/games/<room_id>/join", methods=['POST'])
+def join_room(room_id):
+    if room_id not in rooms.keys():
+        return {'error': "room id not found"}, 404
+    return jsonify({"token": get_token(room_id)})
 
 
 @app2.route("/")
@@ -103,13 +120,6 @@ def home():
 @app2.route("/ui/games/<string:id>")
 def game(id):
     return render_template("game.html", room_id=id)
-
-
-@app2.route("/games/<room_id>/join", methods=['POST'])
-def join_room(room_id):
-    if room_id not in rooms.keys():
-        return {'error': "room id not found"}, 404
-    return jsonify({"token": "helloworldabc"})
 
 
 if __name__ == '__main__':
