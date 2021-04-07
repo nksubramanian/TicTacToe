@@ -95,6 +95,6 @@ def tokenreturn(room_id):
 
 
 if __name__ == '__main__':
-    #app2.run(debug=True, host='0.0.0.0', port=80)
-     app2.run(debug=True)
+    app2.run(debug=True, host='0.0.0.0', port=80)
+    #app2.run(debug=True)
 
