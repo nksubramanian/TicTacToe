@@ -23,13 +23,13 @@ function OnJoin() {
     var room_id = textcontrol.value;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
+
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
             var token = data.token
             localStorage.setItem('token', token);
             window.location.href = "/ui/games/" + room_id
-        }
-        if (this.readyState == 4 && this.status == 404) {
+        }else if (this.readyState == 4 && this.status == 404) {
             textcontrol.value = ' ';
             document.getElementById("demo").innerHTML = "No such room exists";
         }

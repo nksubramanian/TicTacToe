@@ -106,7 +106,9 @@ def game(id):
 
 
 @app2.route("/games/<room_id>/join", methods=['POST'])
-def tokenreturn(room_id):
+def join_room(room_id):
+    if room_id not in rooms.keys():
+        return {'error': "room id not found"}, 404
     return jsonify({"token": "helloworldabc"})
 
 
