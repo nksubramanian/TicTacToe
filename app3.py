@@ -86,6 +86,14 @@ def game(id):
     return render_template("game.html", room_id=id)
 
 
+@app2.route("/games/<room_id>/join")
+def tokenreturn(room_id):
+    k = request.headers.get('XXX')
+    print(k)
+    return jsonify({"token": "helloworldabc"})
+
+
+
 if __name__ == '__main__':
     #app2.run(debug=True, host='0.0.0.0', port=80)
      app2.run(debug=True)
