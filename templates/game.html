@@ -19,7 +19,11 @@
 </head>
 <body onload="javascript:onLoad()">
 <script>
+var retrievedObject = localStorage.getItem('token')
+
+
 var room_id = '{{room_id}}';
+
 
 function onPlay(value) {
     var payload = {'cell': value};
@@ -89,6 +93,7 @@ function render(response){
     document.getElementById("g").innerHTML = convert(myObj.board[2][0]);
     document.getElementById("h").innerHTML = convert(myObj.board[2][1]);
     document.getElementById("i").innerHTML = convert(myObj.board[2][2]);
+    document.getElementById("token").innerHTML = retrievedObject
     var message = "";
     if(myObj.is_draw){
         message = "The game is draw";
@@ -145,6 +150,6 @@ function onLoad() {
 
 </p>
 </div>
-
+<div id="token"></div>
 </body>
 </html>

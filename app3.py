@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask_cors import CORS
+
 from tic_tac_toe import TicTacToe
 import random
 
 app2 = Flask(__name__)
+CORS(app2)
+
 rooms = {}
 
 
@@ -24,7 +28,7 @@ def create_game():
     while room_id in rooms.keys():
         room_id = create_random_string()
     rooms[room_id] = TicTacToe(room_id)
-    return jsonify({'room_id': room_id}), 201
+    return jsonify({'room_id': room_id, "token": "helloworldxyz"}), 202
 
 
 @app2.route('/games/<string:room_id>')
