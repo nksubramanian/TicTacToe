@@ -18,6 +18,10 @@ def conclusion(room):
             }
 
 
+def is_forbidden(authorization_value):
+    return authorization_value is None or "Bearer" not in authorization_value
+
+
 def create_random_string():
     return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
 
@@ -33,6 +37,10 @@ def create_game():
 
 @app2.route('/games/<string:room_id>')
 def get_game(room_id):
+    authorization_value = request.headers.get('Authorization')
+    if is_forbidden(authorization_value):
+        return {'error': "access denied"}, 401
+    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -45,7 +53,7 @@ def get_game(room_id):
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
 def reset_game(room_id):
     authorization_value = request.headers.get('Authorization')
-    if authorization_value is None or "Bearer" not in authorization_value:
+    if is_forbidden(authorization_value):
         return {'error': "access denied"}, 401
     print("Authorization succeeded")
     if room_id not in rooms.keys():
@@ -57,6 +65,10 @@ def reset_game(room_id):
 
 @app2.route('/games/<string:room_id>/play', methods=['POST'])
 def play_game(room_id):
+    authorization_value = request.headers.get('Authorization')
+    if is_forbidden(authorization_value):
+        return {'error': "access denied"}, 401
+    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
@@ -70,6 +82,10 @@ def play_game(room_id):
 
 @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
 def relinquish_first_turn(room_id):
+    authorization_value = request.headers.get('Authorization')
+    if is_forbidden(authorization_value):
+        return {'error': "access denied"}, 401
+    print("Authorization succeeded")
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]

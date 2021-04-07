@@ -30,7 +30,7 @@ function OnJoin() {
             window.location.href = "/ui/games/" + room_id
         }
         if (this.readyState == 4 && this.status == 404) {
-            textcontrol.value = '';
+            textcontrol.value = ' ';
             document.getElementById("demo").innerHTML = "No such room exists";
         }
     };
