@@ -19,8 +19,9 @@ def conclusion(room):
 
 
 def is_authorized(authorization_value):
-    val = authorization_value is None or "Bearer" not in authorization_value
-    return not val
+    val1 = authorization_value is None
+    val2 = "Bearer" not in authorization_value
+    return not (val1 or val2)
 
 
 def create_random_string():
