@@ -52,6 +52,7 @@ function onRelinquish(value) {
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/relinquish-first-turn", true);
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
     xmlhttp.send();
 
 
@@ -67,6 +68,7 @@ function onReset(value) {
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/reset", true);
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
     xmlhttp.send();
 
 
@@ -117,6 +119,7 @@ function refresh() {
         }
     };
     xmlhttp.open("GET","/games/"+room_id, true);
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
     xmlhttp.send();
 }
 
