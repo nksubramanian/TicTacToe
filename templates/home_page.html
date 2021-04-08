@@ -9,7 +9,8 @@
     if (this.readyState == 4) {
      var data = JSON.parse(this.responseText);
      var token = data.token
-     localStorage.setItem('token', token);
+     var room_id = data.room_id
+     localStorage.setItem("token"+room_id,token);
 
      window.location.href = "/ui/games/" + data.room_id
      }
@@ -27,7 +28,8 @@ function OnJoin() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
             var token = data.token
-            localStorage.setItem('token', token);
+            var room_id = data.room_id
+            localStorage.setItem("token"+room_id,token);
             window.location.href = "/ui/games/" + room_id
         }else if (this.readyState == 4 && this.status == 404) {
             textcontrol.value = ' ';

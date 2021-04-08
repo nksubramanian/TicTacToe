@@ -109,7 +109,8 @@ def relinquish_first_turn(room_id):
 def join_room(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
-    return jsonify({"token": get_token(room_id, 'o')})
+    return jsonify({'room_id': room_id, "token": get_token(room_id, 'o')})
+
 
 
 @app2.route("/")

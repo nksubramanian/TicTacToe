@@ -35,7 +35,7 @@ function onPlay(value) {
     };
     xmlhttp.open("POST","/games/"+room_id+"/play", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
     xmlhttp.send(JSON.stringify(payload));
 }
 
@@ -52,7 +52,7 @@ function onRelinquish(value) {
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/relinquish-first-turn", true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
     xmlhttp.send();
 
 
@@ -68,7 +68,7 @@ function onReset(value) {
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/reset", true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
     xmlhttp.send();
 
 
@@ -106,7 +106,7 @@ function render(response){
         message = myObj.player_to_play + "'s turn to play";
     }
 
-    document.getElementById("demo").innerHTML = message;
+    document.getElementById("message").innerHTML = message;
     document.getElementById("id").innerHTML = "You are "+convert(myObj.id);
     console.log(message);
 
@@ -121,7 +121,7 @@ function refresh() {
         }
     };
     xmlhttp.open("GET","/games/"+room_id, true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem('token'));
+    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
     xmlhttp.send();
 }
 
@@ -132,10 +132,11 @@ function onLoad() {
 
 </script>
 
-<div id="whowon"></div>
-<div id="draw"></div>
-<div id="demo"></div>
+
+
 <div><span>Room ID:</span>{{room_id}}</div>
+<div id="id"></div>
+<div id="message"></div>
 
 
 <div>
@@ -157,6 +158,5 @@ function onLoad() {
 
 </p>
 </div>
-<div id="id"></div>
 </body>
 </html>
