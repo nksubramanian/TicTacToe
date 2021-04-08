@@ -99,10 +99,11 @@ def relinquish_first_turn(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
-    if room.is_relinquishing_starting_turn_possible():
-        room.relinquish_starting_turn()
-        return jsonify(conclusion(room, claim["player"]))
-    return {'error': "unable to relinquish turn"}, 403
+    if room.player_to_play() == claim["player"]:
+        if room.is_relinquishing_starting_turn_possible():
+            room.relinquish_starting_turn()
+            return jsonify(conclusion(room, claim["player"]))
+        return {'error': "unable to relinquish turn"}, 403
 
 
 @app2.route("/games/<room_id>/join", methods=['POST'])
