@@ -26,7 +26,7 @@ secret = "secretxyz"
 def get_claim(r):
     authorization_value = r.headers.get('Authorization')
     try:
-        return jwt.decode(authorization_value[7:], secret, verify=True)
+        return jwt.decode(authorization_value[7:], secret, verify=True, algorithm="HS256")
     except Exception as e:
         print(e)
         return None
@@ -37,7 +37,9 @@ def create_random_string():
 
 
 def get_token(room_id):
-    return jwt.encode({"room_id": room_id}, secret, algorithm="HS256").decode('UTF-8')
+    x = jwt.encode({"room_id": room_id}, secret, algorithm="HS256").decode("UTF-8")
+    return x
+
 
 
 @app2.route('/games', methods=["POST"])
@@ -66,7 +68,7 @@ def get_game(room_id):
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
 def reset_game(room_id):
     claim = get_claim(request)
-    if claim is None or room_id != claim.room_id:
+    if claim is None or room_id != claim["room_id"]:
         return {'error': "access denied"}, 401
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
@@ -78,7 +80,7 @@ def reset_game(room_id):
 @app2.route('/games/<string:room_id>/play', methods=['POST'])
 def play_game(room_id):
     claim = get_claim(request)
-    if claim is None or room_id != claim.room_id:
+    if claim is None or room_id != claim["room_id"]:
         return {'error': "access denied"}, 401
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
@@ -94,7 +96,7 @@ def play_game(room_id):
 @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
 def relinquish_first_turn(room_id):
     claim = get_claim(request)
-    if claim is None or room_id != claim.room_id:
+    if claim is None or room_id != claim["room_id"]:
         return {'error': "access denied"}, 401
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
