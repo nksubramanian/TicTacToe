@@ -1,7 +1,6 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 import jwt
-import json
 
 from tic_tac_toe import TicTacToe
 import random
@@ -36,10 +35,9 @@ def create_random_string():
     return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
 
 
-def get_token(room_id):
-    x = jwt.encode({"room_id": room_id}, secret, algorithm="HS256").decode("UTF-8")
+def get_token(room_id, player):
+    x = jwt.encode({"room_id": room_id, "player": player}, secret, algorithm="HS256").decode("UTF-8")
     return x
-
 
 
 @app2.route('/games', methods=["POST"])
@@ -48,7 +46,7 @@ def create_game():
     while room_id in rooms.keys():
         room_id = create_random_string()
     rooms[room_id] = TicTacToe(room_id)
-    return jsonify({'room_id': room_id, "token": get_token(room_id)}), 202
+    return jsonify({'room_id': room_id, "token": get_token(room_id, 'x')}), 202
 
 
 @app2.route('/games/<string:room_id>')
@@ -85,12 +83,14 @@ def play_game(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
-    payload = request.get_json()
-    cell = payload['cell']
-    y = cell % 3
-    x = cell // 3
-    room.play(x, y)
-    return jsonify(conclusion(room))
+    if room.player_to_play() == claim["player"]:
+        payload = request.get_json()
+        cell = payload['cell']
+        y = cell % 3
+        x = cell // 3
+        room.play(x, y)
+        return jsonify(conclusion(room))
+    return {'error': "not your turn to play"}, 403
 
 
 @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
@@ -104,14 +104,14 @@ def relinquish_first_turn(room_id):
     if room.is_relinquishing_starting_turn_possible():
         room.relinquish_starting_turn()
         return jsonify(conclusion(room))
-    return {'error': "unable to relinquish turn"}, 400
+    return {'error': "unable to relinquish turn"}, 403
 
 
 @app2.route("/games/<room_id>/join", methods=['POST'])
 def join_room(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
-    return jsonify({"token": get_token(room_id)})
+    return jsonify({"token": get_token(room_id, 'o')})
 
 
 @app2.route("/")
@@ -126,4 +126,3 @@ def game(id):
 
 if __name__ == '__main__':
     app2.run(debug=True, host='0.0.0.0', port=80)
-
