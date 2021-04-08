@@ -11,11 +11,12 @@ CORS(app2)
 rooms = {}
 
 
-def conclusion(room):
+def conclusion(room, identity):
     return {'board': room.positions,
             'player_to_play': room.player_to_play(),
             "is_draw": room.is_game_draw(),
-            "who_won": room.get_winner()
+            "who_won": room.get_winner(),
+            "id": identity
             }
 
 
@@ -57,10 +58,7 @@ def get_game(room_id):
     if room_id not in rooms.keys():
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
-    return jsonify(conclusion(room))
-
-    #status of the game (in progress, won, draw)
-    #Winner
+    return jsonify(conclusion(room, claim["player"]))
 
 
 @app2.route('/games/<string:room_id>/reset', methods=['POST'])
@@ -72,7 +70,7 @@ def reset_game(room_id):
         return {'error': "room id not found"}, 404
     room = rooms[room_id]
     room.reset()
-    return jsonify(conclusion(room))
+    return jsonify(conclusion(room, claim["player"]))
 
 
 @app2.route('/games/<string:room_id>/play', methods=['POST'])
@@ -89,7 +87,7 @@ def play_game(room_id):
         y = cell % 3
         x = cell // 3
         room.play(x, y)
-        return jsonify(conclusion(room))
+        return jsonify(conclusion(room, claim["player"]))
     return {'error': "not your turn to play"}, 403
 
 
@@ -103,7 +101,7 @@ def relinquish_first_turn(room_id):
     room = rooms[room_id]
     if room.is_relinquishing_starting_turn_possible():
         room.relinquish_starting_turn()
-        return jsonify(conclusion(room))
+        return jsonify(conclusion(room, claim["player"]))
     return {'error': "unable to relinquish turn"}, 403
 
 

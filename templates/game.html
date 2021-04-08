@@ -96,8 +96,9 @@ function render(response){
     document.getElementById("g").innerHTML = convert(myObj.board[2][0]);
     document.getElementById("h").innerHTML = convert(myObj.board[2][1]);
     document.getElementById("i").innerHTML = convert(myObj.board[2][2]);
-    document.getElementById("token").innerHTML = retrievedObject
+    document.getElementById("check").innerHTML = convert(myObj.id);
     var message = "";
+
     if(myObj.is_draw){
         message = "The game is draw";
     }else if(myObj.who_won != null){
@@ -105,7 +106,9 @@ function render(response){
     }else{
         message = myObj.player_to_play + "'s turn to play";
     }
+
     document.getElementById("demo").innerHTML = message;
+    document.getElementById("id").innerHTML = message;
     console.log(message);
 
 }
@@ -129,6 +132,7 @@ function onLoad() {
 }
 
 </script>
+
 <div id="whowon"></div>
 <div id="draw"></div>
 <div id="demo"></div>
@@ -154,6 +158,6 @@ function onLoad() {
 
 </p>
 </div>
-<div id="token"></div>
+<div id="check"></div>
 </body>
 </html>
