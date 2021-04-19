@@ -119,6 +119,8 @@ def home():
     return render_template("home_page.html")
 
 
+
+
 @app2.route("/ui/games/<string:id>")
 def game(id):
     return render_template("game.html", room_id=id)
