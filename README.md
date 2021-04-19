@@ -6,7 +6,7 @@
 - The application is build using Flask (Other dependencies are in Requirements.txt)
 
 ## Getting Started
-
+Flask application is started from the file app3.py
 
 ## Below are the end points
 Create Game ('/games', methods=["POST"]) returns token and room_id. This token is for a room id and player "x"
