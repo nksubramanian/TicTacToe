@@ -8,6 +8,7 @@
 ## Getting Started
 
 
+## Below are the end points
 Create Game ('/games', methods=["POST"]) returns token and room_id. This token is for a room id and player "x"
 
 GET Get game ('/games/<string:room_id>') This end point is to get the game in the room id. This returns the players id,
@@ -19,7 +20,6 @@ The Header has information of bearer token.
 Relinquish(('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])): This endpoint has only bearer token passed in the header. 
 
 Join Room("/games/<room_id>/join", methods=['POST']): This endpoint returns the room_id and token for player "o"
-
 
 Reset('/games/<string:room_id>/reset', methods=['POST']): This endpoint is used to reset the game. 
 
