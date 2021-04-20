@@ -4,12 +4,25 @@ from flask_cors import CORS
 from tic_tac_toe import TicTacToe
 import random
 
+class Business:
+    def __init__(self, rooms):
+        self.rooms = rooms
+
+    def generate_room_id(self):
+        return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
+
+    def create_room(self):
+        room_id = self.generate_room_id()
+        while room_id in self.rooms.keys():
+            room_id = self.generate_room_id()
+        self.rooms[room_id] = TicTacToe(room_id)
+        return room_id, 'x'
 
 def create_app(auth_handler):
     app = Flask(__name__)
     CORS(app)
     rooms = {} #db
-
+    business = Business(rooms)
 
     def get_game_status(room, identity):
         return {'board': room.positions,
@@ -25,18 +38,12 @@ def create_app(auth_handler):
         return auth_handler.get_claim(authorization_value)
 
     def create_token(room_id, player):
-        auth_handler.create_token(room_id, player)
-
-    def generate_room_id():
-        return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
+        return auth_handler.create_token(room_id, player)
 
     @app.route('/games', methods=["POST"])
     def create_game():
-        room_id = generate_room_id()
-        while room_id in rooms.keys():
-            room_id = generate_room_id()
-        rooms[room_id] = TicTacToe(room_id)
-        return jsonify({'room_id': room_id, "token": create_token(room_id, 'x')}), 202
+        room_id, player = business.create_room();
+        return jsonify({'room_id': room_id, "token": create_token(room_id, player)}), 202
 
 
     @app.route('/games/<string:room_id>')
