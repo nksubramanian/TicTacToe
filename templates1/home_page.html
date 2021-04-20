@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400&display=swap" rel="stylesheet">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-</head>
-    <body class="home-page-body">
+    <body>
 
 <script>
   function onCreate() {
@@ -49,21 +42,13 @@ function OnJoin() {
 
 
 </script>
-<div class="header_hero">
-    <div class="hpage-btn-container">
-        <div class="hpage-btn-group1">
-            <button onclick="onCreate()" class="btn btn_full">Create Room</button>
-        </div>
-        <div class="hpage-btn-group2">
-            <input type="text" id="txtname" class="input-field" placeholder="Enter code here" />
-            <input type="button" id="btnsubmit" onclick="OnJoin()" class="btn btn_ghost" value="Join Room" />
-        </div>
-    </div>
-
-</div>
+<button onclick="onCreate()">Create Room</button>
+<br><br><br><br>
+<input type="text" id="txtname" />
+<br><br>
+    <input type="button" id="btnsubmit" onclick="OnJoin()" value="Join Room" />
 
 
-
-<div id="demo"></div>
-</body>
+    <div id="demo"></div>
+    </body>
 </html>
