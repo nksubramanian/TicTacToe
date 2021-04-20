@@ -18,6 +18,12 @@ class Business:
         self.rooms[room_id] = TicTacToe(room_id)
         return room_id, 'x'
 
+    def get_room(self, room_id):
+        if room_id not in self.rooms.keys():
+            return None
+        return self.rooms[room_id]
+
+
 def create_app(auth_handler):
     app = Flask(__name__)
     CORS(app)
@@ -42,7 +48,7 @@ def create_app(auth_handler):
 
     @app.route('/games', methods=["POST"])
     def create_game():
-        room_id, player = business.create_room();
+        room_id, player = business.create_room()
         return jsonify({'room_id': room_id, "token": create_token(room_id, player)}), 202
 
 
@@ -51,9 +57,9 @@ def create_app(auth_handler):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
-        if room_id not in rooms.keys():
+        room = business.get_room(room_id)
+        if room is None:
             return {'error': "room id not found"}, 404
-        room = rooms[room_id]
         return jsonify(get_game_status(room, claim["player"]))
 
 
