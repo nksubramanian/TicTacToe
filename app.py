@@ -1,17 +1,15 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 
-from authorization_handler import AuthorizationHandler
 from tic_tac_toe import TicTacToe
 import random
 
 
-def create_app():
+def create_app(auth_handler):
     app = Flask(__name__)
     CORS(app)
     rooms = {} #db
 
-    auth_handler = AuthorizationHandler("secretxyz")
 
     def get_game_status(room, identity):
         return {'board': room.positions,
