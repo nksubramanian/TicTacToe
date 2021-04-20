@@ -6,7 +6,7 @@ class AuthorizationHandler:
 
     def get_claim(self, authorization_value):
         try:
-            return jwt.decode(authorization_value[7:], self.secret, verify=True, algorithm="HS256")
+            return jwt.decode(authorization_value, self.secret, verify=True, algorithm="HS256")
         except Exception as e:
             return None
 
