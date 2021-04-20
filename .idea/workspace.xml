@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1513e82b-0295-4516-bb56-4b14dd4fdd34" name="Default Changelist" comment="Cleaning up">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app3.py" beforeDir="false" afterPath="$PROJECT_DIR$/app3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/game.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/display1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/newroom.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/oldroom.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates1/game.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates1/home_page.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
