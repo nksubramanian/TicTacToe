@@ -6,8 +6,8 @@ from tic_tac_toe import TicTacToe
 import random
 
 def create_app():
-    app2 = Flask(__name__)
-    CORS(app2)
+    app = Flask(__name__)
+    CORS(app)
     rooms = {}
     secret = "secretxyz"
 
@@ -37,7 +37,7 @@ def create_app():
         return x
 
 
-    @app2.route('/games', methods=["POST"])
+    @app.route('/games', methods=["POST"])
     def create_game():
         room_id = create_random_string()
         while room_id in rooms.keys():
@@ -46,7 +46,7 @@ def create_app():
         return jsonify({'room_id': room_id, "token": get_token(room_id, 'x')}), 202
 
 
-    @app2.route('/games/<string:room_id>')
+    @app.route('/games/<string:room_id>')
     def get_game(room_id):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
@@ -57,7 +57,7 @@ def create_app():
         return jsonify(conclusion(room, claim["player"]))
 
 
-    @app2.route('/games/<string:room_id>/reset', methods=['POST'])
+    @app.route('/games/<string:room_id>/reset', methods=['POST'])
     def reset_game(room_id):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
@@ -69,7 +69,7 @@ def create_app():
         return jsonify(conclusion(room, claim["player"]))
 
 
-    @app2.route('/games/<string:room_id>/play', methods=['POST'])
+    @app.route('/games/<string:room_id>/play', methods=['POST'])
     def play_game(room_id):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
@@ -87,7 +87,7 @@ def create_app():
         return {'error': "not your turn to play"}, 403
 
 
-    @app2.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
+    @app.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
     def relinquish_first_turn(room_id):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
@@ -102,7 +102,7 @@ def create_app():
             return {'error': "unable to relinquish turn"}, 403
 
 
-    @app2.route("/games/<room_id>/join", methods=['POST'])
+    @app.route("/games/<room_id>/join", methods=['POST'])
     def join_room(room_id):
         if room_id not in rooms.keys():
             return {'error': "room id not found"}, 404
@@ -110,19 +110,17 @@ def create_app():
 
 
 
-    @app2.route("/")
+    @app.route("/")
     def home():
         return render_template("home_page.html")
 
 
-    @app2.route("/ui/games/<string:id>")
+    @app.route("/ui/games/<string:id>")
     def game(id):
         return render_template("game.html", room_id=id)
 
-    return app2
+    return app
 
 
 
-if __name__ == '__main__':
-    app2 = create_app()
-    app2.run(debug=True, host='0.0.0.0', port=80)
+
