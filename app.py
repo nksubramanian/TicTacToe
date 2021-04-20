@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
-import jwt
 
+from authorization_handler import AuthorizationHandler
 from tic_tac_toe import TicTacToe
 import random
+
 
 def create_app():
     app = Flask(__name__)
@@ -22,17 +23,13 @@ def create_app():
         authorization_value = r.headers.get('Authorization')
         return get_claim(authorization_value)
 
-    secret = "secretxyz" #auth
+    auth_handler = AuthorizationHandler("secretxyz")
 
-    def get_claim(authorization_value): #auth
-        try:
-            return jwt.decode(authorization_value[7:], secret, verify=True, algorithm="HS256")
-        except Exception as e:
-            return None
+    def get_claim(authorization_value):
+        auth_handler.get_claim(authorization_value)
 
-    def create_token(room_id, player): #auth
-        x = jwt.encode({"room_id": room_id, "player": player}, secret, algorithm="HS256").decode("UTF-8")
-        return x
+    def create_token(room_id, player):
+        auth_handler.create_token(room_id, player)
 
     def generate_room_id():
         return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
