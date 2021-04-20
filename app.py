@@ -23,6 +23,11 @@ class Business:
             return None
         return self.rooms[room_id]
 
+    def reset_room(self, room_id):
+        if room_id not in self.rooms.keys():
+            raise Exception("Room not round")
+        self.rooms[room_id].reset()
+        return self.rooms[room_id]
 
 def create_app(auth_handler):
     app = Flask(__name__)
@@ -62,18 +67,16 @@ def create_app(auth_handler):
             return {'error': "room id not found"}, 404
         return jsonify(get_game_status(room, claim["player"]))
 
-
     @app.route('/games/<string:room_id>/reset', methods=['POST'])
     def reset_game(room_id):
         claim = get_claim(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
-        if room_id not in rooms.keys():
+        try:
+            room = business.reset_room(room_id)
+        except Exception as e:
             return {'error': "room id not found"}, 404
-        room = rooms[room_id]
-        room.reset()
         return jsonify(get_game_status(room, claim["player"]))
-
 
     @app.route('/games/<string:room_id>/play', methods=['POST'])
     def play_game(room_id):
