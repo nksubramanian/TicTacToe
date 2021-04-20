@@ -8,10 +8,9 @@ import random
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    rooms = {}
-    secret = "secretxyz"
+    rooms = {} #db
 
-    def conclusion(room, identity):
+    def get_game_status(room, identity):
         return {'board': room.positions,
                 'player_to_play': room.player_to_play(),
                 "is_draw": room.is_game_draw(),
@@ -19,59 +18,60 @@ def create_app():
                 "id": identity
                 }
 
-    def get_claim(r):
+    def get_claim_old(r):
         authorization_value = r.headers.get('Authorization')
+        return get_claim(authorization_value)
+
+    secret = "secretxyz" #auth
+
+    def get_claim(authorization_value): #auth
         try:
             return jwt.decode(authorization_value[7:], secret, verify=True, algorithm="HS256")
         except Exception as e:
-            print(e)
             return None
 
-
-    def create_random_string():
-        return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
-
-
-    def get_token(room_id, player):
+    def create_token(room_id, player): #auth
         x = jwt.encode({"room_id": room_id, "player": player}, secret, algorithm="HS256").decode("UTF-8")
         return x
 
+    def generate_room_id():
+        return str(random.randint(100, 999)) + "-" + str(random.randint(100, 999))
 
     @app.route('/games', methods=["POST"])
     def create_game():
-        room_id = create_random_string()
+        room_id = generate_room_id()
         while room_id in rooms.keys():
-            room_id = create_random_string()
+            room_id = generate_room_id()
         rooms[room_id] = TicTacToe(room_id)
-        return jsonify({'room_id': room_id, "token": get_token(room_id, 'x')}), 202
+        return jsonify({'room_id': room_id, "token": create_token(room_id, 'x')}), 202
 
 
     @app.route('/games/<string:room_id>')
     def get_game(room_id):
-        claim = get_claim(request)
+        claim = get_claim_old(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
         if room_id not in rooms.keys():
             return {'error': "room id not found"}, 404
         room = rooms[room_id]
-        return jsonify(conclusion(room, claim["player"]))
+        return jsonify(get_game_status(room, claim["player"]))
 
 
     @app.route('/games/<string:room_id>/reset', methods=['POST'])
     def reset_game(room_id):
-        claim = get_claim(request)
+        claim = get_claim_old(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
         if room_id not in rooms.keys():
             return {'error': "room id not found"}, 404
         room = rooms[room_id]
         room.reset()
-        return jsonify(conclusion(room, claim["player"]))
+        return jsonify(get_game_status(room, claim["player"]))
 
 
     @app.route('/games/<string:room_id>/play', methods=['POST'])
     def play_game(room_id):
-        claim = get_claim(request)
+        claim = get_claim_old(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
         if room_id not in rooms.keys():
@@ -83,13 +83,13 @@ def create_app():
             y = cell % 3
             x = cell // 3
             room.play(x, y)
-            return jsonify(conclusion(room, claim["player"]))
+            return jsonify(get_game_status(room, claim["player"]))
         return {'error': "not your turn to play"}, 403
 
 
     @app.route('/games/<string:room_id>/relinquish-first-turn', methods=['POST'])
     def relinquish_first_turn(room_id):
-        claim = get_claim(request)
+        claim = get_claim_old(request)
         if claim is None or room_id != claim["room_id"]:
             return {'error': "access denied"}, 401
         if room_id not in rooms.keys():
@@ -98,7 +98,7 @@ def create_app():
         if room.player_to_play() == claim["player"]:
             if room.is_relinquishing_starting_turn_possible():
                 room.relinquish_starting_turn()
-                return jsonify(conclusion(room, claim["player"]))
+                return jsonify(get_game_status(room, claim["player"]))
             return {'error': "unable to relinquish turn"}, 403
 
 
@@ -106,7 +106,7 @@ def create_app():
     def join_room(room_id):
         if room_id not in rooms.keys():
             return {'error': "room id not found"}, 404
-        return jsonify({'room_id': room_id, "token": get_token(room_id, 'o')})
+        return jsonify({'room_id': room_id, "token": create_token(room_id, 'o')})
 
 
 
