@@ -5,130 +5,11 @@
     <title>Title</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static',filename='js/game.js') }}"></script>
 </head>
 <body onload="javascript:onLoad()" class="game-page-body">
-<script>
-var retrievedObject = localStorage.getItem('token')
-var room_id = '{{room_id}}';
-function onPlay(value) {
-    var payload = {'cell': value};
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            render(this.responseText);
-        }
-    };
-    xmlhttp.open("POST","/games/"+room_id+"/play", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
-    xmlhttp.send(JSON.stringify(payload));
-}
-
-function onReset(value) {
-  alert(value)
-  console.log(value)
-}
-
-function onRelinquish(value) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            render(this.responseText);
-        }
-    };
-    xmlhttp.open("POST","/games/"+room_id+"/relinquish-first-turn", true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
-    xmlhttp.send();
-}
-
-function onReset(value) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            render(this.responseText);
-        }
-    };
-    xmlhttp.open("POST","/games/"+room_id+"/reset", true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
-    xmlhttp.send();
-    const boardElement= document.getElementById("board");
-    boardElement.classList.remove('disabled')
-}
-
-function onHome() {
-    location.replace("/")
-}
-
-function convert(x, id ) {
-    const cellElement = document.getElementById(id)
-    if(x == '0' || x == 0){
-        cellElement.innerHTML = ' '
-        cellElement.classList.remove('disabled')
-        return;
-    }else {
-        cellElement.innerHTML = x
-        cellElement.classList.add('disabled')
-        return;
-    }
-}
-
-function render(response){
-    var myObj = JSON.parse(response);
-    console.log(myObj)
-    convert(myObj.board[0][0],"a");
-    convert(myObj.board[0][1],"b");
-    convert(myObj.board[0][2],"c");
-    convert(myObj.board[1][0],"d");
-    convert(myObj.board[1][1],"e");
-    convert(myObj.board[1][2],"f");
-    convert(myObj.board[2][0],"g");
-    convert(myObj.board[2][1],"h");
-    convert(myObj.board[2][2],"i");
-    var message = "";
-
-    const boardElement= document.getElementById("board");
-    if(myObj.is_draw){
-        message = "The game is draw";
-        boardElement.classList.add('disabled')
-    }else if(myObj.who_won != null){
-        message = myObj.who_won+" won the game";
-        boardElement.classList.add('disabled')
-    }else{
-        message = myObj.player_to_play + "'s turn to play";
-        if(myObj.player_to_play != myObj.id){
-            boardElement.classList.add('disabled')
-        }else {
-            boardElement.classList.remove('disabled')
-        }
-    }
-
-    document.getElementById("message").innerHTML = message;
-    document.getElementById("id").innerHTML = "You are "+myObj.id;
-    console.log(message);
-
-}
-
-
-function refresh() {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            render(this.responseText);
-        }
-    };
-    xmlhttp.open("GET","/games/"+room_id, true);
-    xmlhttp.setRequestHeader('Authorization',"Bearer "+ localStorage.getItem("token"+room_id));
-    xmlhttp.send();
-}
-
-function onLoad() {
-    refresh();
-    setInterval(function(){ refresh(); }, 1500);
-}
-
-</script>
-
 <div class="play-container">
 <div class="play-area" id="board">
 
@@ -148,8 +29,21 @@ function onLoad() {
 <span><button onclick="onHome()" class="btn btn_full">Home</button></span>
 </p>
 </div>
+<div class="game_info">
 <div><span>Room ID:</span>{{room_id}}</div>
 <div id="id"></div>
 <div id="message"></div>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="popup-container">
+            <i id="modal-icon" class="popup-badge fab fas "></i>
+            <p id="modal-text" class="popup-text " ></p>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>
