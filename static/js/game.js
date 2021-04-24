@@ -126,7 +126,6 @@ function render(response){
 
 
 function refresh() {
-    console.log(room_id)
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
@@ -140,7 +139,6 @@ function refresh() {
 
 function onLoad() {
     room_id_new = window.location.pathname.replace("/ui/games/", "");
-    console.log('Woring on room '+ room_id_new)
     if(room_id_new != room_id){
         room_id = room_id_new;
         join(room_id_new);
