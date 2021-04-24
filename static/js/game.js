@@ -111,6 +111,7 @@ function render(response){
         }
     }else{
         popupShown = false;
+        hidePopup();
         message = myObj.player_to_play + "'s turn to play";
         if(myObj.player_to_play != myObj.id){
             boardElement.classList.add('disabled')
@@ -190,4 +191,9 @@ function showDrawPopup(){
     modalIcon.classList.add(badgeIcons[0])
     modalText.innerHTML = greetText[0]
     modal.style.display = "block";
+}
+
+function hidePopup(){
+  const modal = document.getElementById("myModal");
+  modal.style.display = "none";
 }
