@@ -47,6 +47,10 @@ html {
     background-repeat: no-repeat;
     background-size: cover;
 }
+.error_info{
+    color: red;
+    font-size: 30px;
+}
 .game_info{
     color: white;
     font-size: 30px;
