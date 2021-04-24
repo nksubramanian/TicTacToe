@@ -1,3 +1,3 @@
 docker build -t nachiappan/subbu-tic-tac-toe .
-ocker push nachiappan/subbu-tic-tac-toe
+docker push nachiappan/subbu-tic-tac-toe
 
