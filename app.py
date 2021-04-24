@@ -51,11 +51,16 @@ def create_app(auth_handler):
     def create_token(room_id, player):
         return auth_handler.create_token(room_id, player)
 
+    @app.route('/secret-reset', methods=["GET"])
+    def reset_all_games():
+        rooms.clear()
+        return "", 200
+
+
     @app.route('/games', methods=["POST"])
     def create_game():
         room_id, player = business.create_room()
         return jsonify({'room_id': room_id, "token": create_token(room_id, player)}), 202
-
 
     @app.route('/games/<string:room_id>')
     def get_game(room_id):
