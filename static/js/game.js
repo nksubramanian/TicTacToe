@@ -38,7 +38,6 @@ function onPlay(value) {
 
 function onReset(value) {
   alert(value)
-  popupShown = false
 }
 
 function onRelinquish(value) {
@@ -46,7 +45,6 @@ function onRelinquish(value) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             render(this.responseText);
-            popupShown = false
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/relinquish-first-turn", true);
@@ -59,7 +57,6 @@ function onReset(value) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             render(this.responseText);
-            popupShown = false
         }
     };
     xmlhttp.open("POST","/games/"+room_id+"/reset", true);
@@ -71,7 +68,6 @@ function onReset(value) {
 
 function onHome() {
     location.replace("/")
-    popupShown = false
 }
 
 function convert(x, id ) {
@@ -114,6 +110,7 @@ function render(response){
             generateGreetings(FAILURE);
         }
     }else{
+        popupShown = false;
         message = myObj.player_to_play + "'s turn to play";
         if(myObj.player_to_play != myObj.id){
             boardElement.classList.add('disabled')
@@ -133,7 +130,6 @@ function refresh() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             render(this.responseText);
-            popupShown = false
         }
     };
     xmlhttp.open("GET","/games/"+room_id, true);
@@ -156,7 +152,7 @@ function generateGreetings(popupType){
             showDrawPopup();
         }
     popupShown = true
- }
+    }
 }
 
 function showSuccessPopup(){
