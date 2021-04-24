@@ -1,4 +1,3 @@
-var retrievedObject = localStorage.getItem('token')
 var room_id = localStorage.getItem("game_room_id");
 var SUCCESS = "SUCCESS";
 var FAILURE = "FAILURE";
@@ -127,6 +126,7 @@ function render(response){
 
 
 function refresh() {
+    console.log(room_id)
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
@@ -139,8 +139,33 @@ function refresh() {
 }
 
 function onLoad() {
+    room_id_new = window.location.pathname.replace("/ui/games/", "");
+    console.log('Woring on room '+ room_id_new)
+    if(room_id_new != room_id){
+        room_id = room_id_new;
+        join(room_id_new);
+    }
     refresh();
     setInterval(function(){ refresh(); }, 1500);
+}
+
+function join(room_id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            var token = data.token
+            var room_id = data.room_id
+            localStorage.setItem("token"+room_id,token);
+            localStorage.setItem("game_room_id",room_id);
+        }else if (this.readyState == 4 && this.status == 404) {
+            alert("no such room exists");
+            window.location.href = "/"
+        }
+    };
+    xhttp.open("POST", "/games/"+room_id+"/join", true);
+    xhttp.send();
 }
 
 function generateGreetings(popupType){
